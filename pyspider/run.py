@@ -5,6 +5,7 @@
 #         http://binux.me
 # Created on 2014-03-05 00:11:49
 
+# Edited by hejob on 20190223
 
 import os
 import sys
@@ -286,7 +287,9 @@ def processor(ctx, processor_cls, process_time_limit, enable_stdout_capture=True
 
 
 @cli.command()
-@click.option('--result-cls', default='pyspider.result.ResultWorker', callback=load_cls,
+# @click.option('--result-cls', default='pyspider.result.ResultWorker', callback=load_cls,
+#               help='ResultWorker class to be used.')
+@click.option('--result-cls', default='pyspider.result.ListResultWorker', callback=load_cls,
               help='ResultWorker class to be used.')
 @click.pass_context
 def result_worker(ctx, result_cls, get_object=False):
@@ -294,9 +297,9 @@ def result_worker(ctx, result_cls, get_object=False):
     Run result worker.
     """
     g = ctx.obj
-    ResultWorker = load_cls(None, None, result_cls)
+    ListResultWorker = load_cls(None, None, result_cls)
 
-    result_worker = ResultWorker(resultdb=g.resultdb, inqueue=g.processor2result)
+    result_worker = ListResultWorker(resultdb=g.resultdb, inqueue=g.processor2result)
 
     g.instances.append(result_worker)
     if g.get('testing_mode') or get_object:
